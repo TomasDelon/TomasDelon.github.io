@@ -11,7 +11,7 @@ window.SITE = {
   photo: "",                      // ex. "assets/photo.jpg" — vide : un monogramme s'affiche à la place
 
   /* --- Contact (à compléter : sans email, la page Contact reste vide) --- */
-  email: "",                      // ex. "prenom@exemple.fr"
+  email: "tomasdelongago@gmail.com",
   telephone: "",                  // ex. "+33 6 12 34 56 78"
   whatsapp: "",                   // ex. "33612345678" (indicatif, sans + ni espaces)
   plateforme: { nom: "", url: "" },   // ex. { nom: "Mon profil Superprof", url: "https://..." }

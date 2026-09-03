@@ -2,6 +2,8 @@
 
 Site statique : HTML, CSS et JavaScript, sans build, sans dépendance. Il fonctionne tel quel sur GitHub Pages.
 
+Direction artistique : « un cours bien mis en page », calquée sur les documents MathDocs (thème Bertault). Tout est décrit dans [`docs/design/DESIGN_SYSTEM.md`](docs/design/DESIGN_SYSTEM.md) ; la méthode pour garder du goût en travaillant avec une IA est dans [`docs/design/BON_GOUT_AVEC_IA.md`](docs/design/BON_GOUT_AVEC_IA.md). Lire le premier avant de toucher au CSS.
+
 ## 1. À remplir avant de publier
 
 Un seul fichier : `assets/site-config.js`.
@@ -37,7 +39,7 @@ Catalogue de la page Produits : `assets/produits.js`. Les entrées avec `exemple
 - Textes des offres : `offres.html` (sept blocs `<article class="offre">`).
 - Accueil : `index.html`. Le visualiseur de dérivée est dans `assets/demo-derivee.js` ; la fonction tracée est `f = x³/6 − x`, modifiable en haut du fichier.
 - Tri pas à pas de la page Offres : `assets/demo-tri.js`.
-- Couleurs et typographie : variables en haut de `assets/styles.css`. Polices chargées depuis Google Fonts (STIX Two Text, JetBrains Mono) ; pour un site sans requête externe, remplacez la ligne `<link href="https://fonts.googleapis.com/...">` de chaque page par des polices locales.
+- Couleurs, typographie, espacements : variables en haut de `assets/styles.css`, documentées dans `docs/design/DESIGN_SYSTEM.md`. Polices chargées depuis Google Fonts (Charis SIL, IBM Plex Mono) ; pour un site sans requête externe, remplacez la ligne `<link href="https://fonts.googleapis.com/...">` de chaque page par des polices locales.
 
 ## 4. Tester en local
 
