@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tomas, cours particuliers de mathématiques et d’informatique</title>
+  <meta name="description" content="Cours particuliers de mathématiques et d’informatique par un étudiant à Ensimag : collège, lycée, supérieur, programmation. Méthode, visualisation, supports personnalisés. Grenoble ou à distance.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%231e4fd8'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='20' fill='white' text-anchor='middle'%3Ef′%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html"><b data-prenom>Tomas</b> <span>cours de maths et d’informatique</span></a>
+    <nav class="site-nav" aria-label="Navigation principale">
+      <a href="index.html" aria-current="page">Accueil</a>
+      <a href="offres.html">Offres</a>
+      <a href="produits.html">Produits</a>
+      <a href="a-propos.html">À propos</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero quadrille" id="visualiser">
+    <div class="wrap">
+      <div>
+        <h1>Des cours de mathématiques et d’informatique où l’on comprend ce qu’on fait.</h1>
+        <p class="lead">Étudiant à Ensimag, 20/20 au bac de mathématiques, 5 ans de cours particuliers. J’accompagne collégiens, lycéens, étudiants et adultes, à <span data-ville>Grenoble</span> ou à distance, avec des supports faits pour chaque élève : PDF après chaque séance, carnet d’erreurs, fiches, contrôles blancs, visualisations interactives.</p>
+        <div class="btn-row">
+          <a class="btn" href="contact.html" data-contact="Demande de cours particuliers">Me contacter</a>
+          <a class="btn btn-secondary" href="offres.html">Voir les offres</a>
+        </div>
+      </div>
+
+      <figure class="hero-figure">
+        <div class="demo">
+          <canvas id="demo-derivee" width="560" height="360" aria-label="Courbe de f(x) = x³/6 − x avec un point déplaçable et sa tangente"></canvas>
+          <div class="demo-controls">
+            <input type="range" id="demo-x" aria-label="Position du point sur l’axe des abscisses">
+            <label for="demo-x">Déplacer le point</label>
+          </div>
+          <div class="demo-readout" aria-live="polite">
+            <span>x = <b id="demo-out-x">0.80</b></span>
+            <span class="encre">f(x) = <b id="demo-out-f">0.00</b></span>
+            <span class="rouge">f′(x) = <b id="demo-out-d">0.00</b></span>
+          </div>
+          <p class="demo-note" id="demo-note"></p>
+        </div>
+        <figcaption class="small muted" style="margin-top:.6rem">Un exemple de ce que je fais en séance quand un schéma vaut mieux qu’une phrase : la dérivée, c’est la pente de la tangente. Faites glisser le point.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>Pour qui</h2>
+      <p class="muted" style="margin-bottom:2rem">Sept offres, regroupées en trois publics. Chacune a son propre déroulé et ses propres supports.</p>
+      <div class="publics">
+        <article>
+          <h3>Collège et lycée</h3>
+          <p>Suivi régulier en mathématiques, préparation du brevet, préparation du bac (spécialité ou maths complémentaires). Comprendre ce qui bloque, travailler les méthodes, corriger les erreurs qui reviennent, gagner en autonomie.</p>
+          <a href="offres.html#college-lycee">Voir les trois offres</a>
+        </article>
+        <article>
+          <h3>Supérieur</h3>
+          <p>Licence, BUT, prépa, première année d’école : mathématiques, informatique, ou les deux avec un seul interlocuteur. TD, TP, projets, partiels, rédaction des démonstrations.</p>
+          <a href="offres.html#superieur">Voir les trois offres</a>
+        </article>
+        <article>
+          <h3>Programmation</h3>
+          <p>Tous niveaux, du premier programme à un projet ambitieux. Python, C, C++, développement web. On apprend en construisant quelque chose qui vous intéresse.</p>
+          <a href="offres.html#programmation">Voir l’offre</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-alt">
+    <div class="wrap">
+      <h2>Ce que vous recevez</h2>
+      <p style="margin-bottom:1.5rem">Chaque élève repart avec des supports faits pour lui, pas avec un cours standard. Concrètement :</p>
+      <div class="feuille">
+        <div class="feuille-head"><strong>Supports d’un élève</strong><span>mis à jour à chaque séance</span></div>
+        <dl>
+          <dt>PDF de la séance</dt>
+          <dd>Tout ce qui a été écrit pendant la séance : explications, exercices corrigés, points à retenir. Envoyé après chaque séance.</dd>
+          <dt>Carnet d’erreurs</dt>
+          <dd>L’erreur, pourquoi elle arrive, la version correcte. À relire avant chaque évaluation.</dd>
+          <dt>Fiches méthodes</dt>
+          <dd>Les démarches importantes de chaque chapitre : quoi faire, et quand.</dd>
+          <dt>Exercices sur mesure</dt>
+          <dd>Banque d’exercices par chapitre et par difficulté, sujets d’entraînement, contrôles blancs corrigés au format de l’évaluation visée.</dd>
+          <dt>Plan de révision</dt>
+          <dd>Avant chaque évaluation : quoi réviser, dans quel ordre, avec quels exercices, selon le temps disponible.</dd>
+          <dt>Visualisations et mini-applications</dt>
+          <dd>Schémas, graphiques, outils interactifs, QCM, quand cela rend une notion plus claire ou l’entraînement plus actif.</dd>
+          <dt>Flashcards</dt>
+          <dd>Pour mémoriser définitions, formules, méthodes, syntaxe.</dd>
+          <dt>Point avec les parents</dt>
+          <dd>Pour les collégiens et lycéens : ce qui a été travaillé, ce qui progresse, ce qui reste à consolider.</dd>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="cols">
+        <div>
+          <h2>Une séance type</h2>
+          <p>Le détail varie selon le niveau et l’objectif, mais le fil est le même.</p>
+          <ol class="etapes">
+            <li>Point sur ce qui s’est passé depuis la dernière séance : devoirs, contrôle rendu, questions restées sans réponse.</li>
+            <li>Reprise de la notion du moment, expliquée autrement si l’explication du cours n’a pas suffi, avec un schéma ou un exemple exécuté pas à pas.</li>
+            <li>Exercices d’application, guidés puis faits seul.</li>
+            <li>Exercices plus complets, au format de l’évaluation visée : rédaction, erreurs fréquentes, réflexes à acquérir.</li>
+            <li>Bilan et travail pour la prochaine fois. Le PDF de la séance suit dans la foulée.</li>
+          </ol>
+        </div>
+        <div>
+          <h2>Comment je travaille</h2>
+          <p>Je ne guide pas vers la réponse : l’objectif est que l’élève sache refaire seul un exercice du même type, et qu’il comprenne pourquoi la méthode fonctionne.</p>
+          <p>La première séance sert à faire un état des lieux : chapitres à consolider, dernières copies, façon de travailler, ce qui réussit déjà. On en déduit un objectif réaliste selon le temps disponible, et on avance à partir de là.</p>
+          <p>Quand un schéma, un graphique ou un programme exécuté sous les yeux explique mieux qu’un discours, je le construis. C’est souvent ce qui débloque une notion restée abstraite.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-alt">
+    <div class="wrap">
+      <h2>Où et quand</h2>
+      <div class="cols">
+        <div>
+          <h3>Sur place</h3>
+          <p><span data-zone>Grenoble et alentours</span>.</p>
+        </div>
+        <div>
+          <h3>À distance</h3>
+          <p>En visioconférence, avec une tablette graphique : tout ce qui est écrit pendant la séance est envoyé en PDF juste après.</p>
+        </div>
+      </div>
+      <p class="muted" style="margin-top:1rem">Disponibilités : <span data-dispo>soirs en semaine et week-ends</span>.</p>
+    </div>
+  </section>
+
+  <section id="temoignages" hidden>
+    <div class="wrap">
+      <h2>Ils en parlent</h2>
+      <div class="temoignages"></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>Parlons de votre situation</h2>
+      <p>Niveau, matière, objectif, échéance : dites-moi où vous en êtes, je vous réponds avec une proposition concrète.</p>
+      <div class="btn-row">
+        <a class="btn" href="contact.html" data-contact="Demande de cours particuliers">Me contacter</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p><b data-nom>Tomas</b>, cours particuliers de mathématiques et d’informatique, <span data-zone>Grenoble et alentours</span> et à distance.<br><span data-email-footer></span></p>
+    <nav aria-label="Pied de page">
+      <a href="offres.html">Offres</a>
+      <a href="produits.html">Produits</a>
+      <a href="a-propos.html">À propos</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="assets/site-config.js"></script>
+<script src="assets/main.js"></script>
+<script src="assets/demo-derivee.js"></script>
+</body>
+</html>

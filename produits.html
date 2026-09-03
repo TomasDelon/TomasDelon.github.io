@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Produits, fiches de cours, flashcards, contrôles blancs et mini-applications</title>
+  <meta name="description" content="Supports de mathématiques et d’informatique créés pour les élèves : fiches de cours, fiches méthodes, flashcards, contrôles blancs corrigés, mini-applications interactives.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%231e4fd8'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='20' fill='white' text-anchor='middle'%3Ef′%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html"><b data-prenom>Tomas</b> <span>cours de maths et d’informatique</span></a>
+    <nav class="site-nav" aria-label="Navigation principale">
+      <a href="index.html">Accueil</a>
+      <a href="offres.html">Offres</a>
+      <a href="produits.html" aria-current="page">Produits</a>
+      <a href="a-propos.html">À propos</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <div class="page-head quadrille">
+    <div class="wrap">
+      <h1>Produits</h1>
+      <p class="lead">Les supports que je crée pour mes élèves, disponibles séparément. Chacun peut être adapté à un programme, un chapitre ou un niveau précis.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="wrap">
+      <h2>Cinq types de supports</h2>
+      <div class="types">
+        <div>
+          <h3>Fiches de cours</h3>
+          <p>Un chapitre en une ou deux pages : définitions, théorèmes, méthodes, erreurs fréquentes. PDF.</p>
+        </div>
+        <div>
+          <h3>Fiches méthodes</h3>
+          <p>Les démarches importantes d’un chapitre : quoi faire, dans quel ordre, et à quoi reconnaître qu’il faut le faire. PDF.</p>
+        </div>
+        <div>
+          <h3>Flashcards</h3>
+          <p>Questions d’un côté, réponse et exemple de l’autre, pour mémoriser définitions, formules, méthodes, syntaxe. PDF à imprimer.</p>
+        </div>
+        <div>
+          <h3>Contrôles blancs corrigés</h3>
+          <p>Un sujet au format de l’évaluation visée, avec barème, corrigé rédigé et commentaires sur les points où l’on perd des points. PDF.</p>
+        </div>
+        <div>
+          <h3>Mini-applications</h3>
+          <p>Un outil interactif pour manipuler une notion, voir un algorithme s’exécuter ou s’auto-évaluer. Web, sans installation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-alt">
+    <div class="wrap">
+      <h2>Catalogue</h2>
+      <div class="filtres">
+        <label>Niveau
+          <select id="f-niveau">
+            <option value="">Tous</option>
+            <option>Collège</option>
+            <option>Lycée</option>
+            <option>Supérieur</option>
+            <option>Programmation</option>
+          </select>
+        </label>
+        <label>Type
+          <select id="f-type">
+            <option value="">Tous</option>
+            <option>Fiche de cours</option>
+            <option>Fiches méthodes</option>
+            <option>Flashcards</option>
+            <option>Contrôle blanc</option>
+            <option>Mini-application</option>
+          </select>
+        </label>
+      </div>
+      <ul class="catalogue" id="catalogue"></ul>
+      <p class="catalogue-vide" id="catalogue-vide" hidden>Aucun produit ne correspond à ces filtres.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>Un support sur mesure</h2>
+      <p>Vous ne trouvez pas le chapitre, le programme ou le format qu’il vous faut ? Dites-moi le niveau, le chapitre et l’objectif : je vous réponds avec une proposition et un délai.</p>
+      <div class="btn-row"><a class="btn" href="contact.html" data-contact="Demande de support sur mesure">Demander un support sur mesure</a></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p><b data-nom>Tomas</b>, cours particuliers de mathématiques et d’informatique, <span data-zone>Grenoble et alentours</span> et à distance.<br><span data-email-footer></span></p>
+    <nav aria-label="Pied de page">
+      <a href="offres.html">Offres</a>
+      <a href="produits.html">Produits</a>
+      <a href="a-propos.html">À propos</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="assets/site-config.js"></script>
+<script src="assets/produits.js"></script>
+<script src="assets/main.js"></script>
+<script>
+(function () {
+  const S = window.SITE || {};
+  const P = window.PRODUITS || [];
+  const ul = document.getElementById("catalogue");
+  const vide = document.getElementById("catalogue-vide");
+  const fN = document.getElementById("f-niveau");
+  const fT = document.getElementById("f-type");
+
+  const esc = (s) => String(s || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  function action(p) {
+    if (p.lien) return `<a class="btn btn-secondary" href="${esc(p.lien)}">${p.prix === "Gratuit" ? "Ouvrir" : "Obtenir"}</a>`;
+    const sujet = encodeURIComponent("Demande : " + p.titre);
+    const href = S.email ? `mailto:${S.email}?subject=${sujet}` : "contact.html";
+    return `<a class="btn btn-secondary" href="${href}">Demander</a>`;
+  }
+
+  function rendre() {
+    const n = fN.value, t = fT.value;
+    const liste = P.filter((p) => (!n || p.niveau === n) && (!t || p.type === t));
+    ul.innerHTML = liste.map((p) => `
+      <li>
+        <div>
+          <h3>${esc(p.titre)}${p.exemple ? '<span class="badge-exemple">Exemple à remplacer</span>' : ""}</h3>
+          <p class="meta"><b>${esc(p.type)}</b>, ${esc(p.niveau)}, ${esc(p.format)}</p>
+          <p>${esc(p.description)}</p>
+        </div>
+        <div class="action">
+          <span class="prix">${esc(p.prix) || "Sur demande"}</span>
+          ${action(p)}
+        </div>
+      </li>`).join("");
+    vide.hidden = liste.length > 0;
+  }
+  fN.addEventListener("change", rendre);
+  fT.addEventListener("change", rendre);
+  rendre();
+})();
+</script>
+</body>
+</html>
