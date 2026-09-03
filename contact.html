@@ -5,17 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Contact, cours particuliers de mathématiques et d’informatique</title>
   <meta name="description" content="Contacter Tomas pour des cours particuliers de mathématiques, d’informatique ou de programmation, à Grenoble ou à distance.">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%231e4fd8'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='20' fill='white' text-anchor='middle'%3Ef′%3C/text%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%23476B99'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='20' fill='white' text-anchor='middle'%3Ef′%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Charis+SIL:ital,wght@0,400;0,700;1,400;1,700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
+<a class="skip" href="#main">Aller au contenu</a>
 
 <header class="site-header">
   <div class="wrap">
-    <a class="brand" href="index.html"><b data-prenom>Tomas</b> <span>cours de maths et d’informatique</span></a>
+    <a class="brand" href="index.html"><b data-prenom>Tomas</b><span class="brand-sub">cours de mathématiques et d’informatique</span></a>
     <nav class="site-nav" aria-label="Navigation principale">
       <a href="index.html">Accueil</a>
       <a href="offres.html">Offres</a>
@@ -26,9 +27,9 @@
   </div>
 </header>
 
-<main>
+<main id="main">
 
-  <div class="page-head quadrille">
+  <div class="page-head">
     <div class="wrap">
       <h1>Contact</h1>
       <p class="lead">Dites-moi où vous en êtes, je vous réponds avec une proposition concrète.</p>
@@ -59,20 +60,23 @@
           </select>
           <label for="f-message">Votre message</label>
           <textarea id="f-message" name="message" required placeholder="Matière, objectif, échéance, sur place ou à distance…"></textarea>
-          <button class="btn" type="submit">Envoyer</button>
+          <button class="btn" type="submit">Envoyer le message</button>
         </form>
       </div>
 
       <div>
-        <h2>Ce qui m’aide à vous répondre vite</h2>
-        <ul>
-          <li>La classe ou l’année d’études, et l’établissement si utile.</li>
-          <li>La matière, et le chapitre ou le module qui pose problème.</li>
-          <li>L’objectif : remonter dans une matière, préparer un contrôle, un partiel, le brevet, le bac, un projet.</li>
-          <li>L’échéance, s’il y en a une.</li>
-          <li>Sur place à <span data-ville>Grenoble</span> ou à distance, et les créneaux qui vous conviennent.</li>
-        </ul>
-        <p class="muted">Pour un support sur mesure (fiche, contrôle blanc, flashcards, mini-application), précisez le niveau, le chapitre et le format souhaité.</p>
+        <h2>Pour une réponse rapide</h2>
+        <div class="box box--meth" style="margin-top:0">
+          <p class="box-label">Méthode <span class="box-title">(Ce qu’il est utile de m’indiquer)</span></p>
+          <ul>
+            <li>La classe ou l’année d’études, et l’établissement si utile.</li>
+            <li>La matière, et le chapitre ou le module qui pose problème.</li>
+            <li>L’objectif : remonter dans une matière, préparer un contrôle, un partiel, le brevet, le bac, un projet.</li>
+            <li>L’échéance, s’il y en a une.</li>
+            <li>Sur place à <span data-ville>Grenoble</span> ou à distance, et les créneaux qui vous conviennent.</li>
+          </ul>
+        </div>
+        <p class="muted small">Pour un support sur mesure (fiche, contrôle blanc, flashcards, mini-application), précisez le niveau, le chapitre et le format souhaité.</p>
       </div>
     </div>
   </section>

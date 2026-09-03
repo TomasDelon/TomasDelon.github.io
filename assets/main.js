@@ -61,7 +61,7 @@
   if (tarifs) {
     if (Array.isArray(S.tarifs) && S.tarifs.length) {
       tarifs.innerHTML =
-        `<table><thead><tr><th>Offre</th><th>Tarif</th></tr></thead><tbody>` +
+        `<table class="table"><thead><tr><th>Offre</th><th>Tarif</th></tr></thead><tbody>` +
         S.tarifs.map((t) => `<tr><td>${t.offre}</td><td>${t.prix}</td></tr>`).join("") +
         `</tbody></table>` + (S.tarifsNote ? `<p class="small muted" style="margin-top:.75rem">${S.tarifsNote}</p>` : "");
     } else {

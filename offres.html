@@ -5,17 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Offres, cours particuliers de mathématiques et d’informatique</title>
   <meta name="description" content="Sept offres : collège et lycée, brevet, bac, supérieur en mathématiques et informatique, programmation tous niveaux. Déroulé des séances et supports fournis.">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%231e4fd8'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='20' fill='white' text-anchor='middle'%3Ef′%3C/text%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%23476B99'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='20' fill='white' text-anchor='middle'%3Ef′%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Charis+SIL:ital,wght@0,400;0,700;1,400;1,700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
+<a class="skip" href="#main">Aller au contenu</a>
 
 <header class="site-header">
   <div class="wrap">
-    <a class="brand" href="index.html"><b data-prenom>Tomas</b> <span>cours de maths et d’informatique</span></a>
+    <a class="brand" href="index.html"><b data-prenom>Tomas</b><span class="brand-sub">cours de mathématiques et d’informatique</span></a>
     <nav class="site-nav" aria-label="Navigation principale">
       <a href="index.html">Accueil</a>
       <a href="offres.html" aria-current="page">Offres</a>
@@ -26,9 +27,9 @@
   </div>
 </header>
 
-<main>
+<main id="main">
 
-  <div class="page-head quadrille">
+  <div class="page-head">
     <div class="wrap">
       <h1>Offres</h1>
       <p class="lead">Sept offres, une par situation. Chacune décrit ce qu’on fait en séance et ce que vous recevez entre les séances. Toutes existent sur place à <span data-ville>Grenoble</span> et à distance.</p>
@@ -132,7 +133,12 @@
   <section class="groupe" id="superieur">
     <div class="wrap">
       <h2>Supérieur</h2>
-      <p class="muted">Licence, BUT, prépa, première année d’école. Je ne code pas et je ne rédige pas à votre place : vous trouvez, je vous aide à comprendre pourquoi cela fonctionne, pour que le prochain TD se passe sans moi.</p>
+      <p class="muted">Licence, BUT, prépa, première année d’école.</p>
+
+      <div class="box box--warn">
+        <p class="box-label">Attention <span class="box-title">(Ce que je ne fais pas)</span></p>
+        <p>Je ne code pas et je ne rédige pas à votre place : vous trouvez, je vous aide à comprendre pourquoi cela fonctionne, pour que le prochain TD se passe sans moi.</p>
+      </div>
 
       <article class="offre" id="sup-maths">
         <h3>Mathématiques dans le supérieur</h3>
@@ -249,13 +255,13 @@
           </div>
         </div>
 
-        <h4 style="margin-top:1.5rem">Un exemple de ce que « voir ce que fait un programme » veut dire</h4>
-        <div class="tri" id="demo-tri">
-          <p class="small muted" style="margin-bottom:.25rem">Tri à bulles, exécuté une comparaison à la fois. La ligne de code en cours est surlignée.</p>
+        <div class="box box--note" id="demo-tri">
+          <p class="box-label">Exemple <span class="box-title">(Voir ce que fait un programme)</span></p>
+          <p class="small muted">Tri à bulles, exécuté une comparaison à la fois. La ligne de code en cours est surlignée.</p>
           <div class="tri-barres" aria-hidden="true"></div>
           <pre class="tri-code" aria-label="Pseudo-code du tri à bulles"></pre>
           <p class="tri-msg" aria-live="polite"></p>
-          <div class="btn-row" style="margin-top:.75rem">
+          <div class="btn-row" style="margin-top:var(--s3)">
             <button class="btn" type="button" data-etape>Étape suivante</button>
             <button class="btn btn-secondary" type="button" data-reset>Recommencer</button>
           </div>
@@ -266,7 +272,7 @@
     </div>
   </section>
 
-  <section class="section-alt tarifs" id="tarifs">
+  <section class="tarifs" id="tarifs">
     <div class="wrap">
       <h2>Tarifs</h2>
       <div id="tarifs-table"></div>
