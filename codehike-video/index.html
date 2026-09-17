@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1,user-scalable=no" />
+<meta name="theme-color" content="#0b0d12" />
+<title>Code Hike autoplay</title>
+<style>
+  *{box-sizing:border-box}
+  html,body,#root{margin:0;width:100%;height:100%;background:#0b0d12;overflow:hidden}
+  body{overscroll-behavior:none;touch-action:none;-webkit-user-select:none;user-select:none}
+  .stage{position:fixed;inset:0;background:#0b0d12;color:#eef2ff;display:flex;align-items:stretch;justify-content:stretch;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+  .code-shell{width:100%;height:100%;overflow:auto;scrollbar-width:none;background:#0b0d12}
+  .code-shell::-webkit-scrollbar{display:none}
+  pre[data-ch]{margin:0!important;width:100%;min-height:100%;padding:5.5vh 4.5vw 8vh!important;background:#0b0d12!important;font:clamp(13px,3.55vw,19px)/1.62 "SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;tab-size:2;overflow:auto;white-space:pre}
+  .row{display:flex;min-width:max-content;transition:opacity .22s ease,background .22s ease,transform .22s ease}
+  .ln{flex:0 0 2.9em;padding-right:.85em;text-align:right;color:#3f4657;font-size:.78em;line-height:inherit;user-select:none}
+  .txt{display:block;min-width:max-content;padding-right:5vw;white-space:pre}
+  .focus{opacity:.16}
+  .focus[data-focus="true"]{opacity:1;background:linear-gradient(90deg,#6366f126,transparent 72%)}
+  .mark{border-left:3px solid transparent;padding-left:8px;margin-left:-11px}
+  .diff-add{background:#22c55e1b;border-left:3px solid #22c55e}
+  .diff-del{background:#ef44441b;border-left:3px solid #ef4444;text-decoration:line-through;opacity:.58}
+  .callout{border-radius:5px;padding:1px 3px;margin:-1px -3px;background:#f59e0b24;outline:1px solid #f59e0b55}
+  .pulse{animation:pulse .45s ease}
+  @keyframes pulse{0%{filter:brightness(1)}50%{filter:brightness(1.35)}100%{filter:brightness(1)}}
+  .paused::after{content:"";position:fixed;inset:0;background:#00000005;pointer-events:none}
+  @media (orientation:landscape){pre[data-ch]{font-size:clamp(12px,2.2vw,18px);padding:4vh 3.2vw 6vh!important}}
+</style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.3.1",
+    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+    "codehike/code": "https://esm.sh/codehike@1.1.0/code?deps=react@18.3.1",
+    "codehike/utils/token-transitions": "https://esm.sh/codehike@1.1.0/utils/token-transitions?deps=react@18.3.1"
+  }
+}
+</script>
+</head>
+<body>
+<div id="root"></div>
+<script type="module">
+import React,{useEffect,useLayoutEffect,useRef,useState} from "react";
+import {createRoot} from "react-dom/client";
+import {Pre,highlight,InnerLine,InnerPre,InnerToken,getPreRef} from "codehike/code";
+import {getStartingSnapshot,calculateTransitions} from "codehike/utils/token-transitions";
+const h=React.createElement;
+const STEP_MS=500;
+
+const frames=[
+`// !focus(1:4)\n#[derive(Debug, Clone)]\nstruct Task {\n    title: String,\n    done: bool,\n}`,
+`#[derive(Debug, Clone)]\nstruct Task {\n    title: String,\n    done: bool,\n}\n\n// !focus(1:1)\nimpl Task {}`,
+`#[derive(Debug, Clone)]\nstruct Task {\n    title: String,\n    done: bool,\n}\n\n// !focus(1:5)\nimpl Task {\n    fn new(title: impl Into<String>) -> Self {\n        Self { title: title.into(), done: false }\n    }\n}`,
+`#[derive(Debug, Clone)]\nstruct Task {\n    title: String,\n    done: bool,\n}\n\nimpl Task {\n    fn new(title: impl Into<String>) -> Self {\n        Self { title: title.into(), done: false }\n    }\n\n    // !focus(1:3)\n    fn complete(&mut self) {\n        self.done = true;\n    }\n}`,
+`#[derive(Debug, Clone)]\nstruct Task {\n    title: String,\n    done: bool,\n}\n\nimpl Task {\n    fn new(title: impl Into<String>) -> Self {\n        Self { title: title.into(), done: false }\n    }\n\n    // !mark(1:3) #a78bfa\n    fn complete(&mut self) {\n        self.done = true;\n    }\n}`,
+`#[derive(Debug, Clone)]\nstruct Task {\n    title: String,\n    done: bool,\n}\n\nimpl Task {\n    fn new(title: impl Into<String>) -> Self {\n        Self { title: title.into(), done: false }\n    }\n\n    fn complete(&mut self) {\n        self.done = true;\n    }\n}\n\n// !focus(1:3)\nstruct TaskList {\n    tasks: Vec<Task>,\n}`,
+`#[derive(Debug, Clone)]\nstruct Task {\n    title: String,\n    done: bool,\n}\n\nimpl Task {\n    fn new(title: impl Into<String>) -> Self {\n        Self { title: title.into(), done: false }\n    }\n\n    fn complete(&mut self) {\n        self.done = true;\n    }\n}\n\nstruct TaskList { tasks: Vec<Task> }\n\n// !focus(1:4)\nimpl TaskList {\n    fn new() -> Self {\n        Self { tasks: Vec::new() }\n    }\n}`,
+`#[derive(Debug, Clone)]\nstruct Task { title: String, done: bool }\n\nimpl Task {\n    fn new(title: impl Into<String>) -> Self {\n        Self { title: title.into(), done: false }\n    }\n    fn complete(&mut self) { self.done = true; }\n}\n\nstruct TaskList { tasks: Vec<Task> }\n\nimpl TaskList {\n    fn new() -> Self { Self { tasks: Vec::new() } }\n\n    // !focus(1:3)\n    fn add(&mut self, title: impl Into<String>) {\n        self.tasks.push(Task::new(title));\n    }\n}`,
+`#[derive(Debug, Clone)]\nstruct Task { title: String, done: bool }\n\nimpl Task {\n    fn new(title: impl Into<String>) -> Self { Self { title: title.into(), done: false } }\n    fn complete(&mut self) { self.done = true; }\n}\n\nstruct TaskList { tasks: Vec<Task> }\n\nimpl TaskList {\n    fn new() -> Self { Self { tasks: Vec::new() } }\n    fn add(&mut self, title: impl Into<String>) { self.tasks.push(Task::new(title)); }\n\n    // !focus(1:5)\n    fn complete(&mut self, index: usize) {\n        if let Some(task) = self.tasks.get_mut(index) {\n            task.complete();\n        }\n    }\n}`,
+`#[derive(Debug, Clone)]\nstruct Task { title: String, done: bool }\n\nimpl Task {\n    fn new(title: impl Into<String>) -> Self { Self { title: title.into(), done: false } }\n    fn complete(&mut self) { self.done = true; }\n}\n\nstruct TaskList { tasks: Vec<Task> }\n\nimpl TaskList {\n    fn new() -> Self { Self { tasks: Vec::new() } }\n    fn add(&mut self, title: impl Into<String>) { self.tasks.push(Task::new(title)); }\n    fn complete(&mut self, index: usize) {\n        if let Some(task) = self.tasks.get_mut(index) { task.complete(); }\n    }\n}\n\n// !focus(1:6)\nfn main() {\n    let mut list = TaskList::new();\n    list.add("Learn focus");\n    list.add("Animate tokens");\n}`,
+`#[derive(Debug, Clone)]\nstruct Task { title: String, done: bool }\n\nimpl Task {\n    fn new(title: impl Into<String>) -> Self { Self { title: title.into(), done: false } }\n    fn complete(&mut self) { self.done = true; }\n}\n\nstruct TaskList { tasks: Vec<Task> }\n\nimpl TaskList {\n    fn new() -> Self { Self { tasks: Vec::new() } }\n    fn add(&mut self, title: impl Into<String>) { self.tasks.push(Task::new(title)); }\n    fn complete(&mut self, index: usize) {\n        if let Some(task) = self.tasks.get_mut(index) { task.complete(); }\n    }\n}\n\nfn main() {\n    let mut list = TaskList::new();\n    list.add("Learn focus");\n    list.add("Animate tokens");\n    // !mark(1:1) #60a5fa\n    list.complete(0);\n}`,
+`#[derive(Debug, Clone)]\nstruct Task { title: String, done: bool }\n\nimpl Task {\n    fn new(title: impl Into<String>) -> Self { Self { title: title.into(), done: false } }\n    fn complete(&mut self) { self.done = true; }\n}\n\nstruct TaskList { tasks: Vec<Task> }\n\nimpl TaskList {\n    fn new() -> Self { Self { tasks: Vec::new() } }\n    fn add(&mut self, title: impl Into<String>) { self.tasks.push(Task::new(title)); }\n    fn complete(&mut self, index: usize) {\n        if let Some(task) = self.tasks.get_mut(index) { task.complete(); }\n    }\n}\n\nfn main() {\n    let mut list = TaskList::new();\n    list.add("Learn focus");\n    list.add("Animate tokens");\n    list.complete(0);\n    // !focus(1:1)\n    println!("{:#?}", list.tasks);\n}`,
+`#[derive(Debug, Clone)]\nstruct Task { title: String, done: bool }\n\nimpl Task {\n    // !diff -\n    fn new(title: impl Into<String>) -> Self { Self { title: title.into(), done: false } }\n    // !diff +\n    fn pending(title: impl Into<String>) -> Self { Self { title: title.into(), done: false } }\n    fn complete(&mut self) { self.done = true; }\n}\n\nstruct TaskList { tasks: Vec<Task> }\n\nimpl TaskList {\n    fn new() -> Self { Self { tasks: Vec::new() } }\n    fn add(&mut self, title: impl Into<String>) { self.tasks.push(Task::pending(title)); }\n}`,
+`#[derive(Debug, Clone)]\nstruct Task { title: String, done: bool }\n\nimpl Task {\n    fn pending(title: impl Into<String>) -> Self { Self { title: title.into(), done: false } }\n    fn complete(&mut self) { self.done = true; }\n}\n\nstruct TaskList { tasks: Vec<Task> }\n\nimpl TaskList {\n    fn new() -> Self { Self { tasks: Vec::new() } }\n    // !callout[/push/] append to the end of the vector\n    fn add(&mut self, title: impl Into<String>) { self.tasks.push(Task::pending(title)); }\n}`,
+`#[derive(Debug, Clone)]\nstruct Task { title: String, done: bool }\n\nimpl Task {\n    fn pending(title: impl Into<String>) -> Self { Self { title: title.into(), done: false } }\n    fn complete(&mut self) { self.done = true; }\n}\n\nstruct TaskList { tasks: Vec<Task> }\n\nimpl TaskList {\n    fn new() -> Self { Self { tasks: Vec::new() } }\n    fn add(&mut self, title: impl Into<String>) { self.tasks.push(Task::pending(title)); }\n    fn complete(&mut self, index: usize) {\n        if let Some(task) = self.tasks.get_mut(index) { task.complete(); }\n    }\n}\n\n// !focus(1:8)\nfn main() {\n    let mut list = TaskList::new();\n    list.add("Focus");\n    list.add("Marks");\n    list.add("Diffs");\n    list.complete(0);\n    println!("{:#?}", list.tasks);\n}`,
+`#[derive(Debug, Clone)]\nstruct Task { title: String, done: bool }\n\nimpl Task {\n    fn pending(title: impl Into<String>) -> Self { Self { title: title.into(), done: false } }\n    fn complete(&mut self) { self.done = true; }\n}\n\nstruct TaskList { tasks: Vec<Task> }\n\nimpl TaskList {\n    fn new() -> Self { Self { tasks: Vec::new() } }\n    fn add(&mut self, title: impl Into<String>) { self.tasks.push(Task::pending(title)); }\n    fn complete(&mut self, index: usize) {\n        if let Some(task) = self.tasks.get_mut(index) { task.complete(); }\n    }\n}\n\nfn main() {\n    let mut list = TaskList::new();\n    list.add("Focus");\n    list.add("Marks");\n    list.add("Diffs");\n    list.complete(0);\n    println!("{:#?}", list.tasks);\n}`
+];
+
+const lineNumbers={name:"line-numbers",Line:(props)=>h("div",{className:"row"},h("span",{className:"ln"},props.lineNumber),h(InnerLine,{merge:props,className:"txt"}))};
+const PreWithFocus=(props)=>{const ref=getPreRef(props);useLayoutEffect(()=>{const pre=ref.current;if(!pre)return;const els=[...pre.querySelectorAll('[data-focus="true"]')];if(!els.length)return;const cr=pre.getBoundingClientRect();let top=Infinity,bottom=-Infinity;els.forEach(el=>{const r=el.getBoundingClientRect();top=Math.min(top,r.top-cr.top);bottom=Math.max(bottom,r.bottom-cr.top)});if(bottom>cr.height||top<0)pre.scrollTo({top:pre.scrollTop+top-cr.height*.22,behavior:"smooth"});});return h(InnerPre,{merge:props});};
+const focus={name:"focus",onlyIfAnnotated:true,PreWithRef:PreWithFocus,Line:(props)=>h(InnerLine,{merge:props,className:"focus"}),AnnotatedLine:({annotation,...props})=>h(InnerLine,{merge:props,"data-focus":true,className:"focus"})};
+const mark={name:"mark",Line:({annotation,...props})=>h(InnerLine,{merge:props,className:"mark",style:annotation?{borderLeftColor:annotation.query||"#a78bfa",background:(annotation.query||"#a78bfa")+"18"}:undefined})};
+const diff={name:"diff",AnnotatedLine:({annotation,...props})=>h(InnerLine,{merge:props,className:annotation.query.trim()==="+"?"diff-add":"diff-del"})};
+const callout={name:"callout",Inline:({annotation,children})=>h("span",{className:"callout",title:annotation.query},children)};
+const inlineBlock={name:"inline-block",Token:(props)=>h(InnerToken,{merge:props,style:{display:"inline-block"}})};
+
+class SmoothPre extends React.Component{constructor(p){super(p);this.ref=React.createRef()}render(){return h(Pre,{...this.props,ref:this.ref,handlers:[inlineBlock,...(this.props.handlers||[])],style:{...(this.props.style||{}),position:"relative"}})}getSnapshotBeforeUpdate(){return this.ref.current?getStartingSnapshot(this.ref.current):null}componentDidUpdate(p,s,snap){if(!snap||!this.ref.current)return;calculateTransitions(this.ref.current,snap).forEach(({element,keyframes,options})=>{const {translateX,translateY,...kf}=keyframes;if(translateX&&translateY)kf.translate=[`${translateX[0]}px ${translateY[0]}px`,`${translateX[1]}px ${translateY[1]}px`];element.animate(kf,{duration:Math.min(420,options.duration*420),delay:options.delay*120,easing:options.easing,fill:"both"})})}}
+
+const highlighted=await Promise.all(frames.map(value=>highlight({value,lang:"rust",meta:"main.rs"},"github-dark")));
+
+function App(){
+  const [index,setIndex]=useState(0);
+  const [paused,setPaused]=useState(false);
+  const pausedRef=useRef(false);
+  const acc=useRef(0);
+  const last=useRef(performance.now());
+  useEffect(()=>{let raf;const tick=(now)=>{const dt=now-last.current;last.current=now;if(!pausedRef.current){acc.current+=dt;while(acc.current>=STEP_MS){acc.current-=STEP_MS;setIndex(i=>(i+1)%highlighted.length)}}raf=requestAnimationFrame(tick)};raf=requestAnimationFrame(tick);return()=>cancelAnimationFrame(raf)},[]);
+  useEffect(()=>{const down=(e)=>{if(e.cancelable)e.preventDefault();pausedRef.current=true;setPaused(true)};const up=(e)=>{if(e.cancelable)e.preventDefault();pausedRef.current=false;setPaused(false);last.current=performance.now()};const vis=()=>{if(document.hidden){pausedRef.current=true;setPaused(true)}else{pausedRef.current=false;setPaused(false);last.current=performance.now()}};window.addEventListener("pointerdown",down,{passive:false});window.addEventListener("pointerup",up,{passive:false});window.addEventListener("pointercancel",up,{passive:false});document.addEventListener("visibilitychange",vis);return()=>{window.removeEventListener("pointerdown",down);window.removeEventListener("pointerup",up);window.removeEventListener("pointercancel",up);document.removeEventListener("visibilitychange",vis)}},[]);
+  return h("main",{className:"stage"+(paused?" paused":""),onContextMenu:e=>e.preventDefault()},h("div",{className:"code-shell"},h(SmoothPre,{code:highlighted[index],handlers:[lineNumbers,focus,mark,diff,callout]})));
+}
+createRoot(document.getElementById("root")).render(h(App));
+</script>
+</body>
+</html>
