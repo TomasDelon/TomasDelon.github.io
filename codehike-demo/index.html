@@ -3,142 +3,29 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#0b0d12" />
-  <title>Code Hike mobile walkthrough</title>
-  <style>
-    *{box-sizing:border-box}html{background:#0b0d12;color:#eef2ff;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{margin:0;min-height:100vh;background:radial-gradient(circle at 10% 0,#18213a 0,transparent 32rem),#0b0d12}.shell{width:min(1180px,100%);margin:auto;padding:18px 14px 80px}.top{padding:10px 2px 18px}.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#a5b4fc;font-weight:800}.title{font-size:clamp(28px,7vw,56px);line-height:1.02;margin:8px 0 10px;max-width:850px}.sub{margin:0;color:#aab3c5;line-height:1.6;max-width:760px}.status{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:7px 10px;border:1px solid #293146;border-radius:999px;background:#10141d;font-size:12px;color:#cbd5e1}.dot{width:8px;height:8px;border-radius:999px;background:#fbbf24}.status.ready .dot{background:#34d399}.status.error .dot{background:#fb7185}.layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(430px,.9fr);gap:18px;align-items:start}.steps{display:grid;gap:10px}.step{appearance:none;width:100%;text-align:left;border:1px solid #242b3c;background:#10131a;color:#dbe4f2;border-radius:16px;padding:16px;transition:.18s ease;cursor:pointer}.step:active{transform:scale(.99)}.step.active{border-color:#818cf8;background:#15192a;box-shadow:0 0 0 1px #818cf833}.step-n{font-size:11px;color:#94a3b8;font-weight:800;letter-spacing:.08em;text-transform:uppercase}.step h2{font-size:18px;margin:5px 0 6px}.step p{font-size:14px;line-height:1.55;color:#aeb8ca;margin:0}.code-card{position:sticky;top:10px;border:1px solid #252c3d;border-radius:18px;overflow:hidden;background:#0d1017;box-shadow:0 18px 60px #0008}.bar{height:46px;display:flex;align-items:center;justify-content:space-between;padding:0 13px;border-bottom:1px solid #22293a;background:#11151f}.file{font:600 12px ui-monospace,SFMono-Regular,Menlo,monospace;color:#cbd5e1}.bar-actions{display:flex;gap:7px}.pill{border:1px solid #31394e;background:#171c29;color:#cbd5e1;border-radius:9px;padding:6px 9px;font:600 11px inherit;cursor:pointer}.code-wrap{height:min(68vh,690px);min-height:460px;overflow:auto}.code-wrap pre{margin:0!important;padding:18px 0 28px!important;background:transparent!important;font:13px/1.65 "SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;overflow:auto;min-height:100%;tab-size:2}.code-row{display:flex;min-width:max-content}.ln{user-select:none;color:#4b5568;text-align:right;padding-right:12px;min-width:3.3em;font-size:11px;line-height:21.45px}.code-text{display:block;white-space:pre;padding-right:22px;min-height:21.45px}.focus-line{opacity:.18;transition:opacity .28s ease,background .28s ease}.focus-line[data-focus="true"]{opacity:1;background:#6366f118}.mark-line{border-left:2px solid transparent;padding-left:8px;margin-left:-10px}.inline-mark{border-radius:4px;padding:1px 2px;margin:-1px -2px}.legend{display:flex;flex-wrap:wrap;gap:7px;padding:11px 13px;border-top:1px solid #202738;background:#0f131c;font-size:11px;color:#8f9bb0}.tag{padding:4px 7px;border:1px solid #2e374c;border-radius:999px}.mobile-nav{display:none;position:sticky;bottom:8px;z-index:5;margin-top:12px;background:#111722e8;backdrop-filter:blur(10px);border:1px solid #2a3245;border-radius:15px;padding:7px;grid-template-columns:1fr 1fr;gap:7px}.mobile-nav button{border:0;border-radius:10px;padding:12px;background:#20283a;color:#e5e7eb;font-weight:800}.mobile-nav button:last-child{background:#6366f1}.error-box{display:none;padding:20px;color:#fecdd3;white-space:pre-wrap;font:12px/1.5 ui-monospace,monospace}.error-box.show{display:block}
-    @media(max-width:820px){.shell{padding:14px 10px 90px}.layout{grid-template-columns:1fr}.code-card{position:relative;top:auto}.code-wrap{height:58vh;min-height:390px}.steps{order:2}.code-card{order:1}.step{padding:14px}.mobile-nav{display:grid}.title{font-size:34px}.sub{font-size:14px}}
-  </style>
+  <meta name="theme-color" content="#090b10" />
+  <meta name="color-scheme" content="dark" />
+  <title>Code Hike A–Z mobile lab</title>
+  <meta name="description" content="A mobile-first interactive tour of Code Hike 1.1.0, from highlighting and annotations to scrollycoding, tooltips, transitions, Twoslash and structured MDX." />
+  <link rel="stylesheet" href="./styles.css" />
   <script type="importmap">
   {
     "imports": {
       "react": "https://esm.sh/react@18.3.1",
       "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
       "codehike/code": "https://esm.sh/codehike@1.1.0/code?deps=react@18.3.1",
-      "codehike/utils/token-transitions": "https://esm.sh/codehike@1.1.0/utils/token-transitions?deps=react@18.3.1"
+      "codehike/utils/token-transitions": "https://esm.sh/codehike@1.1.0/utils/token-transitions?deps=react@18.3.1",
+      "codehike/utils/selection": "https://esm.sh/codehike@1.1.0/utils/selection?deps=react@18.3.1"
     }
   }
   </script>
 </head>
 <body>
-<div id="root"><div class="shell"><div class="top"><div class="eyebrow">Loading real Code Hike…</div><h1 class="title">Preparing the walkthrough</h1><p class="sub">If this text stays here for more than a few seconds, reload once in Chrome.</p></div></div></div>
-<script type="module">
-import React, {useEffect,useLayoutEffect,useMemo,useRef,useState} from "react";
-import {createRoot} from "react-dom/client";
-import {Pre,highlight,InnerLine,InnerPre,InnerToken,getPreRef} from "codehike/code";
-import {getStartingSnapshot,calculateTransitions} from "codehike/utils/token-transitions";
-
-const h=React.createElement;
-const rawSteps=[
-  {
-    title:"Model the data",
-    text:"Start with the smallest useful type. Code Hike keeps the focused block bright and dims everything else.",
-    code:`// !focus(1:5)\n#[derive(Debug, Clone)]\nstruct Task {\n    title: String,\n    done: bool,\n}\n\nfn main() {\n    println!("Task engine");\n}`
-  },
-  {
-    title:"Create a constructor",
-    text:"Now the focus moves to the constructor. The code is evolving, not replaced by an unrelated snippet.",
-    code:`#[derive(Debug, Clone)]\nstruct Task {\n    title: String,\n    done: bool,\n}\n\n// !focus(1:8)\nimpl Task {\n    fn new(title: impl Into<String>) -> Self {\n        Self {\n            title: title.into(),\n            done: false,\n        }\n    }\n}\n\nfn main() {\n    let task = Task::new("Learn Code Hike");\n    println!("{task:?}");\n}`
-  },
-  {
-    title:"Add behaviour",
-    text:"A mark annotation is combined with focus. The mark is parsed from the source comment by Code Hike.",
-    code:`#[derive(Debug, Clone)]\nstruct Task {\n    title: String,\n    done: bool,\n}\n\nimpl Task {\n    fn new(title: impl Into<String>) -> Self {\n        Self { title: title.into(), done: false }\n    }\n\n    // !focus(1:4)\n    // !mark(1:3) #a78bfa\n    fn complete(&mut self) {\n        self.done = true;\n    }\n}\n\nfn main() {\n    let mut task = Task::new("Learn Code Hike");\n    task.complete();\n    println!("{task:?}");\n}`
-  },
-  {
-    title:"Work with a collection",
-    text:"The important region can move deeper into a longer file. Focus also auto-scrolls the code pane when needed.",
-    code:`#[derive(Debug, Clone)]\nstruct Task {\n    title: String,\n    done: bool,\n}\n\nimpl Task {\n    fn new(title: impl Into<String>) -> Self {\n        Self { title: title.into(), done: false }\n    }\n\n    fn complete(&mut self) {\n        self.done = true;\n    }\n}\n\nstruct TaskList {\n    tasks: Vec<Task>,\n}\n\nimpl TaskList {\n    fn new() -> Self {\n        Self { tasks: Vec::new() }\n    }\n\n    // !focus(1:4)\n    fn add(&mut self, title: impl Into<String>) {\n        self.tasks.push(Task::new(title));\n    }\n}\n\nfn main() {\n    let mut list = TaskList::new();\n    list.add("Understand focus");\n    list.add("Combine annotations");\n}`
-  },
-  {
-    title:"Compose the final program",
-    text:"The last step focuses on the orchestration. Tokens animate to their new positions using Code Hike's token-transition utilities.",
-    code:`#[derive(Debug, Clone)]\nstruct Task {\n    title: String,\n    done: bool,\n}\n\nimpl Task {\n    fn new(title: impl Into<String>) -> Self {\n        Self { title: title.into(), done: false }\n    }\n\n    fn complete(&mut self) {\n        self.done = true;\n    }\n}\n\nstruct TaskList {\n    tasks: Vec<Task>,\n}\n\nimpl TaskList {\n    fn new() -> Self {\n        Self { tasks: Vec::new() }\n    }\n\n    fn add(&mut self, title: impl Into<String>) {\n        self.tasks.push(Task::new(title));\n    }\n\n    fn complete(&mut self, index: usize) {\n        if let Some(task) = self.tasks.get_mut(index) {\n            task.complete();\n        }\n    }\n}\n\n// !focus(1:8)\nfn main() {\n    let mut list = TaskList::new();\n    list.add("Model data");\n    list.add("Add behaviour");\n    list.complete(0);\n\n    println!("{:#?}", list.tasks);\n}`
-  }
-];
-
-const lineNumbers={
-  name:"line-numbers",
-  Line:(props)=>h("div",{className:"code-row"},
-    h("span",{className:"ln"},props.lineNumber),
-    h(InnerLine,{merge:props,className:"code-text"})
-  )
-};
-
-const PreWithFocus=(props)=>{
-  const ref=getPreRef(props);
-  const first=useRef(true);
-  useLayoutEffect(()=>{
-    const pre=ref.current;
-    if(!pre)return;
-    const focused=[...pre.querySelectorAll('[data-focus="true"]')];
-    if(!focused.length)return;
-    const cr=pre.getBoundingClientRect();
-    let top=Infinity,bottom=-Infinity;
-    focused.forEach(el=>{const r=el.getBoundingClientRect();top=Math.min(top,r.top-cr.top);bottom=Math.max(bottom,r.bottom-cr.top)});
-    if(bottom>cr.height||top<0){pre.scrollTo({top:pre.scrollTop+top-18,behavior:first.current?"auto":"smooth"})}
-    first.current=false;
-  });
-  return h(InnerPre,{merge:props});
-};
-
-const focus={
-  name:"focus",
-  onlyIfAnnotated:true,
-  PreWithRef:PreWithFocus,
-  Line:(props)=>h(InnerLine,{merge:props,className:"focus-line"}),
-  AnnotatedLine:({annotation,...props})=>h(InnerLine,{merge:props,"data-focus":true,className:"focus-line"})
-};
-
-const mark={
-  name:"mark",
-  Line:({annotation,...props})=>h(InnerLine,{merge:props,className:"mark-line",style:annotation?{borderLeftColor:annotation.query||"#38bdf8",background:(annotation.query||"#38bdf8")+"18"}:undefined}),
-  Inline:({annotation,children})=>h("span",{className:"inline-mark",style:{background:(annotation.query||"#38bdf8")+"25",outline:"1px solid "+(annotation.query||"#38bdf8")}},children)
-};
-
-const inlineBlockToken={name:"inline-block",Token:(props)=>h(InnerToken,{merge:props,style:{display:"inline-block"}})};
-
-class SmoothPre extends React.Component{
-  constructor(props){super(props);this.ref=React.createRef()}
-  render(){return h(Pre,{...this.props,ref:this.ref,handlers:[inlineBlockToken,...(this.props.handlers||[])],style:{...(this.props.style||{}),position:"relative"}})}
-  getSnapshotBeforeUpdate(){return this.ref.current?getStartingSnapshot(this.ref.current):null}
-  componentDidUpdate(prevProps,prevState,snapshot){if(!snapshot||!this.ref.current)return;const transitions=calculateTransitions(this.ref.current,snapshot);transitions.forEach(({element,keyframes,options})=>{const {translateX,translateY,...kf}=keyframes;if(translateX&&translateY)kf.translate=[`${translateX[0]}px ${translateY[0]}px`,`${translateX[1]}px ${translateY[1]}px`];element.animate(kf,{duration:options.duration*650,delay:options.delay*650,easing:options.easing,fill:"both"})})}
-}
-
-function App(){
-  const [index,setIndex]=useState(0);
-  const [highlighted,setHighlighted]=useState(null);
-  const [err,setErr]=useState("");
-  useEffect(()=>{
-    let alive=true;
-    setErr("");
-    highlight({value:rawSteps[index].code,lang:"rust",meta:"main.rs"},"github-dark")
-      .then(x=>alive&&setHighlighted(x))
-      .catch(e=>{console.error(e);alive&&setErr(String(e?.stack||e))});
-    return()=>{alive=false};
-  },[index]);
-  const prev=()=>setIndex(i=>Math.max(0,i-1));
-  const next=()=>setIndex(i=>Math.min(rawSteps.length-1,i+1));
-  return h("main",{className:"shell"},
-    h("header",{className:"top"},
-      h("div",{className:"eyebrow"},"Custom tutorial • actual codehike@1.1.0"),
-      h("h1",{className:"title"},"One Rust program, explained step by step"),
-      h("p",{className:"sub"},"Tap the steps. Code Hike parses the annotations, highlights Rust, dims unfocused lines, combines marks, auto-scrolls focus, and animates token movement."),
-      h("div",{className:"status "+(err?"error":highlighted?"ready":"")},h("span",{className:"dot"}),err?"Code Hike failed to load":highlighted?"Code Hike 1.1.0 loaded":"Loading Code Hike…")
-    ),
-    h("section",{className:"layout"},
-      h("div",{className:"steps"},rawSteps.map((s,i)=>h("button",{key:i,className:"step "+(i===index?"active":""),onClick:()=>setIndex(i)},h("div",{className:"step-n"},`Step ${i+1} / ${rawSteps.length}`),h("h2",null,s.title),h("p",null,s.text)))),
-      h("aside",{className:"code-card"},
-        h("div",{className:"bar"},h("span",{className:"file"},"main.rs"),h("div",{className:"bar-actions"},h("button",{className:"pill",onClick:()=>navigator.clipboard?.writeText(highlighted?.code||"")},"Copy"))),
-        err?h("div",{className:"error-box show"},err):h("div",{className:"code-wrap"},highlighted?h(SmoothPre,{code:highlighted,handlers:[lineNumbers,focus,mark]}):h("div",{style:{padding:"20px",color:"#94a3b8"}},"Highlighting…")),
-        h("div",{className:"legend"},h("span",{className:"tag"},"Pre + highlight"),h("span",{className:"tag"},"focus"),h("span",{className:"tag"},"mark"),h("span",{className:"tag"},"line numbers"),h("span",{className:"tag"},"token transitions"))
-      )
-    ),
-    h("div",{className:"mobile-nav"},h("button",{onClick:prev,disabled:index===0},"← Previous"),h("button",{onClick:next,disabled:index===rawSteps.length-1},"Next →"))
-  )
-}
-
-createRoot(document.getElementById("root")).render(h(App));
-</script>
+  <div id="root">
+    <div style="min-height:100svh;display:grid;place-items:center;padding:24px;background:#090b10;color:#94a3b8;font-family:system-ui,sans-serif;text-align:center">
+      <div><strong style="color:#e5e7eb">Loading Code Hike A–Z…</strong><br><small>If this stays visible, refresh once in Chrome.</small></div>
+    </div>
+  </div>
+  <script type="module" src="./app.js"></script>
 </body>
 </html>
