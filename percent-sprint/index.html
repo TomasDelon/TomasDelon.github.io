@@ -273,7 +273,7 @@
 
     .answer-row {
       display: grid;
-      grid-template-columns: 1fr auto;
+      grid-template-columns: 1fr 56px auto;
       gap: 10px;
       margin-top: 14px;
     }
@@ -300,6 +300,26 @@
     .answer-input::placeholder {
       color: #b8b8b3;
       font-weight: 600;
+    }
+
+    .minus-key {
+      border: 1.5px solid #d7d7d2;
+      border-radius: 14px;
+      background: #fff;
+      color: #171717;
+      min-height: 56px;
+      font-size: 28px;
+      line-height: 1;
+      font-weight: 800;
+      cursor: pointer;
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .minus-key:active {
+      transform: translateY(1px);
+      background: #f1f1ee;
     }
 
     .submit {
@@ -525,10 +545,11 @@
       }
 
       .answer-row {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 56px;
       }
 
       .submit {
+        grid-column: 1 / -1;
         width: 100%;
       }
     }
@@ -592,7 +613,7 @@
     <section class="progress-wrap" aria-label="Progression vers le prochain niveau">
       <div class="progress-meta">
         <span id="progressLabel">Prochain niveau : Bronze</span>
-        <span id="progressNumber">0 / 3</span>
+        <span id="progressNumber">0 / 2</span>
       </div>
       <div class="progress">
         <div id="progressBar"></div>
@@ -656,6 +677,13 @@
             placeholder="Ta réponse"
             aria-label="Ta réponse"
           />
+          <button
+            id="minusKey"
+            class="minus-key"
+            type="button"
+            aria-label="Ajouter ou retirer le signe moins"
+            title="Signe moins"
+          >−</button>
           <button id="submitButton" class="submit" type="submit">Valider</button>
         </div>
       </form>
@@ -699,6 +727,7 @@
         form: document.getElementById("answerForm"),
         input: document.getElementById("answer"),
         button: document.getElementById("submitButton"),
+        minusKey: document.getElementById("minusKey"),
         feedback: document.getElementById("feedback"),
         quizCard: document.querySelector(".quiz-card"),
         levelBoxes: [...document.querySelectorAll(".level")]
@@ -1320,6 +1349,25 @@
       els.form.addEventListener("submit", (event) => {
         event.preventDefault();
         submitAnswer();
+      });
+
+      // iPhone's decimal keypad often has no minus key.
+      // Keep the fast numeric keypad and provide our own sign toggle.
+      els.minusKey.addEventListener("click", () => {
+        if (state.awaitingNext || els.input.readOnly) return;
+
+        const raw = els.input.value;
+        if (raw.startsWith("-")) {
+          els.input.value = raw.slice(1);
+        } else {
+          els.input.value = "-" + raw;
+        }
+
+        els.input.focus();
+        const end = els.input.value.length;
+        try {
+          els.input.setSelectionRange(end, end);
+        } catch (error) {}
       });
 
       // Reliable keyboard handling on desktop.
