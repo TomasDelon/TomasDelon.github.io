@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f7f7f5" />
+  <title>Percent Sprint</title>
+
+
+  <style>
+    :root {
+      --bg: #f7f7f5;
+      --card: #ffffff;
+      --text: #171717;
+      --muted: #737373;
+      --line: #e7e7e4;
+      --soft: #f1f1ee;
+      --ok: #147a46;
+      --ok-bg: #edf8f1;
+      --bad: #b42318;
+      --bad-bg: #fff0ee;
+      --shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+      --radius: 22px;
+
+      --rank-bg: #f7f7f5;
+      --rank-glow-1: #ffffff;
+      --rank-glow-2: #efefeb;
+      --rank-accent: #171717;
+    }
+
+    @property --rank-bg {
+      syntax: "<color>";
+      inherits: true;
+      initial-value: #f7f7f5;
+    }
+
+    @property --rank-glow-1 {
+      syntax: "<color>";
+      inherits: true;
+      initial-value: #ffffff;
+    }
+
+    @property --rank-glow-2 {
+      syntax: "<color>";
+      inherits: true;
+      initial-value: #efefeb;
+    }
+
+    @property --rank-accent {
+      syntax: "<color>";
+      inherits: true;
+      initial-value: #171717;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100dvh;
+      background-color: var(--rank-bg);
+      background-image:
+        radial-gradient(circle at 14% 8%, color-mix(in srgb, var(--rank-glow-1) 78%, transparent) 0, transparent 34%),
+        radial-gradient(circle at 88% 18%, color-mix(in srgb, var(--rank-glow-2) 62%, transparent) 0, transparent 38%),
+        linear-gradient(145deg, var(--rank-bg), color-mix(in srgb, var(--rank-bg) 72%, white));
+      background-attachment: fixed;
+      color: var(--text);
+      transition:
+        --rank-bg 900ms cubic-bezier(.22,.61,.36,1),
+        --rank-glow-1 900ms cubic-bezier(.22,.61,.36,1),
+        --rank-glow-2 900ms cubic-bezier(.22,.61,.36,1),
+        --rank-accent 900ms cubic-bezier(.22,.61,.36,1),
+        background-color 900ms cubic-bezier(.22,.61,.36,1);
+      font-family:
+        Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      display: flex;
+      justify-content: center;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      touch-action: manipulation;
+    }
+
+    .app {
+      width: min(100%, 720px);
+      padding:
+        max(22px, env(safe-area-inset-top))
+        max(18px, env(safe-area-inset-right))
+        max(26px, env(safe-area-inset-bottom))
+        max(18px, env(safe-area-inset-left));
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .brand {
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .rank-pill {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.72);
+      padding: 8px 11px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 750;
+      white-space: nowrap;
+      transition:
+        transform 240ms ease,
+        box-shadow 240ms ease,
+        background 500ms ease,
+        border-color 500ms ease;
+    }
+
+    .rank-pill.rank-pop {
+      animation: rankPop 720ms cubic-bezier(.2,.85,.3,1);
+    }
+
+    @keyframes rankPop {
+      0%   { transform: scale(1); }
+      35%  { transform: scale(1.16) rotate(-2deg); }
+      62%  { transform: scale(.98) rotate(1deg); }
+      100% { transform: scale(1) rotate(0); }
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .stat {
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 12px 14px;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+
+    .stat-value {
+      font-size: 23px;
+      line-height: 1;
+      font-weight: 850;
+      letter-spacing: -0.04em;
+    }
+
+    .progress-wrap {
+      margin: 10px 0 18px;
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 7px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .progress {
+      height: 7px;
+      border-radius: 999px;
+      background: #e6e6e2;
+      overflow: hidden;
+    }
+
+    .progress > div {
+      height: 100%;
+      width: 0;
+      border-radius: inherit;
+      background: var(--text);
+      transition: width 220ms ease;
+    }
+
+    .levels {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+
+    .level {
+      min-width: 0;
+      text-align: center;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.62);
+      border-radius: 12px;
+      padding: 8px 4px;
+      color: #a3a3a3;
+      font-size: 10px;
+      font-weight: 800;
+      transition: 180ms ease;
+    }
+
+    .level.unlocked {
+      color: var(--text);
+      background: white;
+    }
+
+    .level.current {
+      outline: 2px solid var(--text);
+      outline-offset: -2px;
+    }
+
+    .level-number {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 1px;
+    }
+
+    .quiz-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      padding: clamp(20px, 5vw, 34px);
+    }
+
+    .question-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 28px;
+    }
+
+    .question {
+      min-height: 120px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      overflow-x: auto;
+      padding: 4px 0 12px;
+    }
+
+    .question {
+      font-family: ui-serif, "Times New Roman", Georgia, serif;
+      font-size: clamp(1.65rem, 8vw, 2.75rem);
+      font-weight: 650;
+      letter-spacing: -0.025em;
+      line-height: 1.25;
+    }
+
+    .answer-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .answer-input {
+      width: 100%;
+      min-width: 0;
+      border: 1.5px solid #d7d7d2;
+      background: #fff;
+      color: var(--text);
+      border-radius: 14px;
+      padding: 15px 16px;
+      font-size: 20px;
+      font-weight: 750;
+      outline: none;
+      transition: border-color 140ms ease, box-shadow 140ms ease;
+    }
+
+    .answer-input:focus {
+      border-color: #777;
+      box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .answer-input::placeholder {
+      color: #b8b8b3;
+      font-weight: 600;
+    }
+
+    .submit {
+      border: 0;
+      border-radius: 14px;
+      background: #171717;
+      color: white;
+      padding: 0 20px;
+      min-height: 56px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .submit:active {
+      transform: translateY(1px);
+    }
+
+    .feedback {
+      display: none;
+      margin-top: 14px;
+      border-radius: 14px;
+      padding: 13px 15px;
+      line-height: 1.4;
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    .feedback.show {
+      display: block;
+    }
+
+    .feedback.correct {
+      color: var(--ok);
+      background: var(--ok-bg);
+    }
+
+    .feedback.wrong {
+      color: var(--bad);
+      background: var(--bad-bg);
+    }
+
+    .feedback strong {
+      font-weight: 850;
+    }
+
+    .hint {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .footer {
+      text-align: center;
+      color: #999;
+      font-size: 11px;
+      margin-top: 15px;
+    }
+
+
+    .celebration {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: grid;
+      place-items: center;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .level-up-card {
+      position: relative;
+      z-index: 2;
+      min-width: min(82vw, 340px);
+      padding: 20px 26px;
+      border-radius: 22px;
+      text-align: center;
+      color: #151515;
+      background: rgba(255,255,255,.84);
+      border: 1px solid rgba(255,255,255,.85);
+      box-shadow: 0 24px 80px rgba(0,0,0,.18);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      animation: levelCardIn 1100ms cubic-bezier(.16,.84,.24,1) both;
+    }
+
+    .level-up-kicker {
+      font-size: 11px;
+      font-weight: 850;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      opacity: .56;
+      margin-bottom: 4px;
+    }
+
+    .level-up-name {
+      font-size: clamp(30px, 8vw, 48px);
+      line-height: 1;
+      font-weight: 950;
+      letter-spacing: -.055em;
+    }
+
+    @keyframes levelCardIn {
+      0%   { opacity: 0; transform: translateY(16px) scale(.78); filter: blur(8px); }
+      18%  { opacity: 1; }
+      48%  { transform: translateY(0) scale(1.05); filter: blur(0); }
+      72%  { transform: scale(.99); opacity: 1; }
+      100% { transform: scale(.96); opacity: 0; }
+    }
+
+    .confetti {
+      position: absolute;
+      top: -24px;
+      left: 50%;
+      width: 9px;
+      height: 16px;
+      border-radius: 3px;
+      opacity: 0;
+      transform-origin: center;
+      animation: confettiFall var(--duration, 1200ms) cubic-bezier(.16,.65,.34,1) var(--delay, 0ms) forwards;
+    }
+
+    @keyframes confettiFall {
+      0% {
+        opacity: 0;
+        transform: translate3d(0, -5vh, 0) rotate(0deg);
+      }
+      8% { opacity: 1; }
+      100% {
+        opacity: 0;
+        transform:
+          translate3d(var(--x, 0px), 108vh, 0)
+          rotate(var(--rotate, 720deg));
+      }
+    }
+
+    body.cosmic-mode {
+      color: #f8f8ff;
+    }
+
+    body.cosmic-mode .brand,
+    body.cosmic-mode .progress-meta,
+    body.cosmic-mode .footer {
+      color: rgba(255,255,255,.82);
+    }
+
+    body.cosmic-mode .stat,
+    body.cosmic-mode .rank-pill,
+    body.cosmic-mode .level {
+      background: rgba(255,255,255,.10);
+      border-color: rgba(255,255,255,.16);
+      color: rgba(255,255,255,.78);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    body.cosmic-mode .level.unlocked,
+    body.cosmic-mode .level.current {
+      color: #fff;
+    }
+
+    body.cosmic-mode .quiz-card {
+      background: rgba(18,18,38,.72);
+      border-color: rgba(255,255,255,.14);
+      color: #fff;
+      box-shadow: 0 24px 80px rgba(0,0,0,.35);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    body.cosmic-mode .answer-input {
+      background: rgba(255,255,255,.94);
+      color: #171717;
+    }
+
+    body.cosmic-mode .question-meta,
+    body.cosmic-mode .hint {
+      color: rgba(255,255,255,.62);
+    }
+
+    .quiz-card.level-flash {
+      animation: levelFlash 900ms ease;
+    }
+
+    @keyframes levelFlash {
+      0%, 100% { transform: translateY(0); box-shadow: var(--shadow); }
+      35% { transform: translateY(-4px); box-shadow: 0 24px 70px color-mix(in srgb, var(--rank-accent) 26%, transparent); }
+    }
+
+    @media (max-width: 520px) {
+      .app {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+
+      .stats {
+        gap: 7px;
+      }
+
+      .stat {
+        padding: 11px 10px;
+      }
+
+      .stat-value {
+        font-size: 20px;
+      }
+
+      .levels {
+        gap: 4px;
+      }
+
+      .level {
+        font-size: 9px;
+        padding: 7px 2px;
+      }
+
+      .quiz-card {
+        padding: 20px 16px;
+      }
+
+      .question {
+        min-height: 105px;
+      }
+
+      .answer-row {
+        grid-template-columns: 1fr;
+      }
+
+      .submit {
+        width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+
+      .confetti {
+        display: none;
+      }
+
+      .level-up-card {
+        animation-duration: 650ms;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <noscript>
+    <div style="
+      max-width:680px;
+      margin:32px auto;
+      padding:20px;
+      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      background:#fff3cd;
+      color:#533f03;
+      border:1px solid #ffe69c;
+      border-radius:16px;
+      line-height:1.5;
+    ">
+      <strong>JavaScript n’est pas exécuté.</strong><br>
+      Sur iPhone, l’aperçu de l’app Fichiers (Quick Look) n’exécute pas le JavaScript.
+      Ouvre cette page depuis un vrai serveur web (https://) pour utiliser le quiz interactif.
+    </div>
+  </noscript>
+  <main class="app">
+    <div class="topbar">
+      <div class="brand">Percent Sprint</div>
+      <div class="rank-pill" id="rankPill">Départ</div>
+    </div>
+
+    <section class="stats" aria-label="Statistiques">
+      <div class="stat">
+        <div class="stat-label">Streak</div>
+        <div class="stat-value" id="streak">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Record</div>
+        <div class="stat-value" id="best">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Justes</div>
+        <div class="stat-value" id="correctCount">0</div>
+      </div>
+    </section>
+
+    <section class="progress-wrap" aria-label="Progression vers le prochain niveau">
+      <div class="progress-meta">
+        <span id="progressLabel">Prochain niveau : Bronze</span>
+        <span id="progressNumber">0 / 3</span>
+      </div>
+      <div class="progress">
+        <div id="progressBar"></div>
+      </div>
+    </section>
+
+    <section class="levels" aria-label="Niveaux">
+      <div class="level" data-level="Bronze" data-threshold="2">
+        <span class="level-number">2</span>Bronze
+      </div>
+      <div class="level" data-level="Argent" data-threshold="4">
+        <span class="level-number">4</span>Argent
+      </div>
+      <div class="level" data-level="Or" data-threshold="6">
+        <span class="level-number">6</span>Or
+      </div>
+      <div class="level" data-level="Platine" data-threshold="9">
+        <span class="level-number">9</span>Platine
+      </div>
+      <div class="level" data-level="Diamant" data-threshold="12">
+        <span class="level-number">12</span>Diamant
+      </div>
+      <div class="level" data-level="Émeraude" data-threshold="16">
+        <span class="level-number">16</span>Émeraude
+      </div>
+      <div class="level" data-level="Saphir" data-threshold="21">
+        <span class="level-number">21</span>Saphir
+      </div>
+      <div class="level" data-level="Rubis" data-threshold="27">
+        <span class="level-number">27</span>Rubis
+      </div>
+      <div class="level" data-level="Mythique" data-threshold="34">
+        <span class="level-number">34</span>Mythique
+      </div>
+      <div class="level" data-level="Cosmique" data-threshold="42">
+        <span class="level-number">42</span>Cosmique
+      </div>
+    </section>
+
+    <section class="quiz-card">
+      <div class="question-meta">
+        <span id="typeLabel">Pourcentage</span>
+        <span id="questionNumber">Question 1</span>
+      </div>
+
+      <div class="question">
+        <div id="question"></div>
+      </div>
+
+      <form id="answerForm" autocomplete="off">
+        <div class="answer-row">
+          <input
+            id="answer"
+            class="answer-input"
+            type="text"
+            inputmode="decimal"
+            enterkeyhint="done"
+            autocapitalize="off"
+            autocomplete="off"
+            spellcheck="false"
+            placeholder="Ta réponse"
+            aria-label="Ta réponse"
+          />
+          <button id="submitButton" class="submit" type="submit">Valider</button>
+        </div>
+      </form>
+
+      <div id="feedback" class="feedback" aria-live="polite"></div>
+      <div class="hint">Virgule ou point acceptés. Appuie sur Entrée pour valider.</div>
+    </section>
+
+    <div class="footer">10 niveaux à débloquer. Le niveau dépend de ton meilleur streak et n’est jamais perdu après une erreur.</div>
+  </main>
+
+
+  <script>
+    (() => {
+      const STORAGE_KEY = "percent-sprint-v1";
+
+      const levels = [
+        { name: "Bronze", threshold: 2 },
+        { name: "Argent", threshold: 4 },
+        { name: "Or", threshold: 6 },
+        { name: "Platine", threshold: 9 },
+        { name: "Diamant", threshold: 12 },
+        { name: "Émeraude", threshold: 16 },
+        { name: "Saphir", threshold: 21 },
+        { name: "Rubis", threshold: 27 },
+        { name: "Mythique", threshold: 34 },
+        { name: "Cosmique", threshold: 42 }
+      ];
+
+      const els = {
+        streak: document.getElementById("streak"),
+        best: document.getElementById("best"),
+        correctCount: document.getElementById("correctCount"),
+        rankPill: document.getElementById("rankPill"),
+        progressLabel: document.getElementById("progressLabel"),
+        progressNumber: document.getElementById("progressNumber"),
+        progressBar: document.getElementById("progressBar"),
+        question: document.getElementById("question"),
+        typeLabel: document.getElementById("typeLabel"),
+        questionNumber: document.getElementById("questionNumber"),
+        form: document.getElementById("answerForm"),
+        input: document.getElementById("answer"),
+        button: document.getElementById("submitButton"),
+        feedback: document.getElementById("feedback"),
+        quizCard: document.querySelector(".quiz-card"),
+        levelBoxes: [...document.querySelectorAll(".level")]
+      };
+
+      let saved = {};
+      try {
+        const rawSaved = window.localStorage.getItem(STORAGE_KEY);
+        saved = rawSaved ? JSON.parse(rawSaved) : {};
+      } catch (error) {
+        // Safari can reject localStorage for local files/private contexts.
+        // The quiz should still work normally for the current session.
+        saved = {};
+      }
+
+      const state = {
+        streak: 0,
+        best: Number(saved.best) || 0,
+        correct: Number(saved.correct) || 0,
+        questionNumber: 0,
+        currentQuestion: null,
+        awaitingNext: false,
+        lastType: null
+      };
+
+      const PERCENTS = [10, 20, 25, 30, 40, 50, 60, 75];
+      const SMALL_PERCENTS = [5, 10, 15, 20, 25, 30, 40, 50, 75];
+
+      const random = (arr) => arr[Math.floor(Math.random() * arr.length)];
+      const int = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+      const round = (n, digits = 4) => Number(n.toFixed(digits));
+
+      const format = (n) =>
+        new Intl.NumberFormat("fr-FR", {
+          maximumFractionDigits: 4
+        }).format(round(n));
+
+      function wholeFriendly() {
+        return 20 * int(2, 40);
+      }
+
+      function save() {
+        try {
+          window.localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify({
+              best: state.best,
+              correct: state.correct
+            })
+          );
+        } catch (error) {
+          // Storage is optional. Ignore Safari/local-file storage failures.
+        }
+      }
+
+      function levelFromBest(best) {
+        let current = null;
+        for (const level of levels) {
+          if (best >= level.threshold) current = level;
+        }
+        return current;
+      }
+
+      function nextLevel(best) {
+        return levels.find((level) => best < level.threshold) || null;
+      }
+
+
+      const rankThemes = {
+        "Départ": {
+          bg: "#f7f7f5",
+          glow1: "#ffffff",
+          glow2: "#e8e8e3",
+          accent: "#171717"
+        },
+        "Bronze": {
+          bg: "#f0dfd0",
+          glow1: "#fff5e9",
+          glow2: "#c9824b",
+          accent: "#a65f2d"
+        },
+        "Argent": {
+          bg: "#e8edf2",
+          glow1: "#ffffff",
+          glow2: "#aab7c6",
+          accent: "#718096"
+        },
+        "Or": {
+          bg: "#f5e7ad",
+          glow1: "#fff9db",
+          glow2: "#d6ad35",
+          accent: "#b78b12"
+        },
+        "Platine": {
+          bg: "#e4eef3",
+          glow1: "#ffffff",
+          glow2: "#93b4c4",
+          accent: "#5f8699"
+        },
+        "Diamant": {
+          bg: "#dff4fa",
+          glow1: "#ffffff",
+          glow2: "#91cde1",
+          accent: "#5aaec9"
+        },
+        "Émeraude": {
+          bg: "#d9f1e3",
+          glow1: "#f2fff7",
+          glow2: "#69b98d",
+          accent: "#318a5d"
+        },
+        "Saphir": {
+          bg: "#dce7ff",
+          glow1: "#f5f8ff",
+          glow2: "#557ee8",
+          accent: "#315cc8"
+        },
+        "Rubis": {
+          bg: "#f5dfe5",
+          glow1: "#fff6f8",
+          glow2: "#dc5472",
+          accent: "#b82f51"
+        },
+        "Mythique": {
+          bg: "#eadcff",
+          glow1: "#fbf6ff",
+          glow2: "#a45cf2",
+          accent: "#7a32cc"
+        },
+        "Cosmique": {
+          bg: "#17152d",
+          glow1: "#5d4ad8",
+          glow2: "#1bc4d4",
+          accent: "#9f8cff"
+        }
+      };
+
+      const confettiPalettes = {
+        "Bronze": ["#8f542f", "#c77a43", "#e6b07a", "#fff1df"],
+        "Argent": ["#737f8e", "#aab4c0", "#dce2e8", "#ffffff"],
+        "Or": ["#b78500", "#e5b72d", "#ffd966", "#fff4b8"],
+        "Platine": ["#5f7f8d", "#8fa9b6", "#c8d7dd", "#ffffff"],
+        "Diamant": ["#4ea8c7", "#89d0e8", "#c7f0fb", "#ffffff"],
+        "Émeraude": ["#25845a", "#49a978", "#8bd6ad", "#e4fff0"],
+        "Saphir": ["#2f5fd0", "#5b84eb", "#9ab7ff", "#eef3ff"],
+        "Rubis": ["#aa2448", "#db5271", "#ff8faa", "#ffe7ed"],
+        "Mythique": ["#6f2bbd", "#9c57e6", "#c997ff", "#f3e8ff"],
+        "Cosmique": ["#6f5cff", "#16c4d8", "#ff5bd1", "#ffffff"]
+      };
+
+      let audioContext = null;
+
+      function applyRankTheme(level) {
+        const name = level ? level.name : "Départ";
+        const theme = rankThemes[name] || rankThemes["Départ"];
+
+        document.documentElement.style.setProperty("--rank-bg", theme.bg);
+        document.documentElement.style.setProperty("--rank-glow-1", theme.glow1);
+        document.documentElement.style.setProperty("--rank-glow-2", theme.glow2);
+        document.documentElement.style.setProperty("--rank-accent", theme.accent);
+        document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme.bg);
+        document.body.classList.toggle("cosmic-mode", name === "Cosmique");
+      }
+
+      function getAudioContext() {
+        if (!audioContext) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (!AudioCtx) return null;
+          audioContext = new AudioCtx();
+        }
+        if (audioContext.state === "suspended") {
+          audioContext.resume();
+        }
+        return audioContext;
+      }
+
+      function playTone({ frequency, start = 0, duration = 0.11, type = "sine", gain = 0.055 }) {
+        const ctx = getAudioContext();
+        if (!ctx) return;
+
+        const osc = ctx.createOscillator();
+        const amp = ctx.createGain();
+        const t = ctx.currentTime + start;
+
+        osc.type = type;
+        osc.frequency.setValueAtTime(frequency, t);
+        amp.gain.setValueAtTime(0.0001, t);
+        amp.gain.exponentialRampToValueAtTime(gain, t + 0.012);
+        amp.gain.exponentialRampToValueAtTime(0.0001, t + duration);
+
+        osc.connect(amp);
+        amp.connect(ctx.destination);
+        osc.start(t);
+        osc.stop(t + duration + 0.02);
+      }
+
+      function playCorrectSound() {
+        playTone({ frequency: 660, duration: 0.10, gain: 0.045 });
+        playTone({ frequency: 880, start: 0.075, duration: 0.13, gain: 0.04 });
+      }
+
+      function playWrongSound() {
+        playTone({ frequency: 190, duration: 0.16, type: "triangle", gain: 0.045 });
+        playTone({ frequency: 145, start: 0.09, duration: 0.19, type: "triangle", gain: 0.04 });
+      }
+
+      function playLevelUpSound(level) {
+        const tier = Math.max(1, levels.findIndex((item) => item.name === level?.name) + 1);
+        const base = 392 + tier * 18;
+
+        const notes = [
+          [base, 0.00],
+          [base * 1.25, 0.08],
+          [base * 1.50, 0.16],
+          [base * 2.00, 0.28]
+        ];
+
+        if (tier >= 7) notes.push([base * 2.50, 0.40]);
+        if (tier >= 9) notes.push([base * 3.00, 0.52]);
+
+        notes.forEach(([frequency, start], index) => {
+          playTone({
+            frequency,
+            start,
+            duration: index === notes.length - 1 ? 0.34 : 0.17,
+            type: tier >= 8 && index % 2 ? "triangle" : "sine",
+            gain: index === notes.length - 1 ? 0.060 : 0.042
+          });
+        });
+      }
+
+      function celebrateLevel(level) {
+        if (!level) return;
+
+        playLevelUpSound(level);
+        applyRankTheme(level);
+
+        els.rankPill.classList.remove("rank-pop");
+        void els.rankPill.offsetWidth;
+        els.rankPill.classList.add("rank-pop");
+
+        els.quizCard.classList.remove("level-flash");
+        void els.quizCard.offsetWidth;
+        els.quizCard.classList.add("level-flash");
+
+        const overlay = document.createElement("div");
+        overlay.className = "celebration";
+
+        const card = document.createElement("div");
+        card.className = "level-up-card";
+        card.innerHTML = `
+          <div class="level-up-kicker">Nouveau niveau</div>
+          <div class="level-up-name">${level.name}</div>
+        `;
+        overlay.appendChild(card);
+
+        const palette = confettiPalettes[level.name] || confettiPalettes["Or"];
+        const tier = Math.max(1, levels.findIndex((item) => item.name === level.name) + 1);
+        const baseCount = window.matchMedia("(max-width: 520px)").matches ? 34 : 52;
+        const count = baseCount + tier * 6;
+
+        for (let i = 0; i < count; i++) {
+          const piece = document.createElement("i");
+          piece.className = "confetti";
+          piece.style.background = palette[i % palette.length];
+          piece.style.left = `${6 + Math.random() * 88}%`;
+          piece.style.setProperty("--x", `${-170 + Math.random() * 340}px`);
+          piece.style.setProperty("--rotate", `${360 + Math.random() * 900}deg`);
+          piece.style.setProperty("--duration", `${900 + Math.random() * 650}ms`);
+          piece.style.setProperty("--delay", `${Math.random() * 180}ms`);
+          piece.style.width = `${6 + Math.random() * 6}px`;
+          piece.style.height = `${9 + Math.random() * 10}px`;
+
+          if (tier >= 8 && i % 5 === 0) {
+            piece.style.borderRadius = "999px";
+            piece.style.boxShadow = "0 0 12px currentColor";
+          }
+
+          overlay.appendChild(piece);
+        }
+
+        document.body.appendChild(overlay);
+        setTimeout(() => overlay.remove(), 1700);
+      }
+
+      function updateStats() {
+        els.streak.textContent = state.streak;
+        els.best.textContent = state.best;
+        els.correctCount.textContent = state.correct;
+
+        const current = levelFromBest(state.best);
+        const next = nextLevel(state.best);
+
+        els.rankPill.textContent = current ? current.name : "Départ";
+        applyRankTheme(current);
+
+        if (next) {
+          const previousThreshold = current ? current.threshold : 0;
+          const range = next.threshold - previousThreshold;          const progress = Math.max(0, state.best - previousThreshold);
+          const pct = Math.min(100, (progress / range) * 100);
+
+          els.progressLabel.textContent = `Prochain niveau : ${next.name}`;
+          els.progressNumber.textContent = `${state.best} / ${next.threshold}`;
+          els.progressBar.style.width = `${pct}%`;
+        } else {
+          els.progressLabel.textContent = "Niveau maximum atteint";
+          els.progressNumber.textContent = `${state.best}`;
+          els.progressBar.style.width = "100%";
+        }
+
+        els.levelBoxes.forEach((box) => {
+          const threshold = Number(box.dataset.threshold);
+          const unlocked = state.best >= threshold;
+          const isCurrent =
+            current && current.name === box.dataset.level;
+
+          box.classList.toggle("unlocked", unlocked);
+          box.classList.toggle("current", Boolean(isCurrent));
+        });
+      }
+
+      function normalizeAnswer(raw) {
+        if (!raw) return NaN;
+
+        return Number(
+          raw
+            .trim()
+            .replace(/\s/g, "")
+            .replace(",", ".")
+            .replace("%", "")
+        );
+      }
+
+      function isCorrect(given, expected) {
+        if (!Number.isFinite(given)) return false;
+        const tolerance = Math.max(0.01, Math.abs(expected) * 0.0005);
+        return Math.abs(given - expected) <= tolerance;
+      }
+
+      function qMultiplierIncrease() {
+        const p = random(SMALL_PERCENTS);
+        return {
+          type: "Coefficient multiplicateur",
+          text: `x + ${p}% = x × □`,
+          answer: round(1 + p / 100),
+          explanation: `Augmenter de ${p} % revient à multiplier par ${format(1 + p / 100)}.`
+        };
+      }
+
+      function qMultiplierDecrease() {
+        const p = random(SMALL_PERCENTS.filter((p) => p < 100));
+        return {
+          type: "Coefficient multiplicateur",
+          text: `x - ${p}% = x × □`,
+          answer: round(1 - p / 100),
+          explanation: `Diminuer de ${p} % revient à multiplier par ${format(1 - p / 100)}.`
+        };
+      }
+
+      function qIncreaseNumber() {
+        const p = random(PERCENTS);
+        const x = wholeFriendly();
+        const delta = (x * p) / 100;
+        const answer = x + delta;
+
+        return {
+          type: "Augmentation",
+          text: `${x} + ${p}% = □`,
+          answer,
+          explanation: `${p} % de ${x} = ${format(delta)}, donc ${x} + ${format(delta)} = ${format(answer)}.`
+        };
+      }
+
+      function qDecreaseNumber() {
+        const p = random(PERCENTS);
+        const x = wholeFriendly();
+        const delta = (x * p) / 100;
+        const answer = x - delta;
+
+        return {
+          type: "Diminution",
+          text: `${x} - ${p}% = □`,
+          answer,
+          explanation: `${p} % de ${x} = ${format(delta)}, donc ${x} - ${format(delta)} = ${format(answer)}.`
+        };
+      }
+
+      function qPercentOf() {
+        const p = random(PERCENTS);
+        const x = wholeFriendly();
+        const answer = (x * p) / 100;
+
+        return {
+          type: "Pourcentage d'une quantité",
+          text: `${p}% de ${x} = □`,
+          answer,
+          explanation: `${p} % × ${x} = ${format(answer)}.`
+        };
+      }
+
+      function qFindWhole() {
+        const p = random(PERCENTS);
+        const whole = wholeFriendly();
+        const part = (whole * p) / 100;
+
+        return {
+          type: "Retrouver le total",
+          text: `${p}% de □ = ${format(part)}`,
+          answer: whole,
+          explanation: `${format(part)} ÷ ${format(p / 100)} = ${format(whole)}.`
+        };
+      }
+
+      function qFindPercent() {
+        const p = random(PERCENTS);
+        const whole = wholeFriendly();
+        const part = (whole * p) / 100;
+
+        return {
+          type: "Retrouver le pourcentage",
+          text: `□% de ${whole} = ${format(part)}`,
+          answer: p,
+          explanation: `${format(part)} ÷ ${whole} = ${format(p / 100)}, soit ${p} %.`
+        };
+      }
+
+      function qReverseIncrease() {
+        const p = random([10, 20, 25, 30, 40, 50]);
+        const original = wholeFriendly();
+        const final = original * (1 + p / 100);
+
+        return {
+          type: "Valeur initiale",
+          text: `□ + ${p}% = ${format(final)}`,
+          answer: original,
+          explanation: `On divise ${format(final)} par ${format(1 + p / 100)} : ${format(original)}.`
+        };
+      }
+
+      function qReverseDecrease() {
+        const p = random([10, 20, 25, 30, 40, 50]);
+        const original = wholeFriendly();
+        const final = original * (1 - p / 100);
+
+        return {
+          type: "Valeur initiale",
+          text: `□ - ${p}% = ${format(final)}`,
+          answer: original,
+          explanation: `On divise ${format(final)} par ${format(1 - p / 100)} : ${format(original)}.`
+        };
+      }
+
+      function qCoefficientToIncreasePercent() {
+        const p = random(SMALL_PERCENTS);
+        const coef = round(1 + p / 100);
+
+        return {
+          type: "Du coefficient au pourcentage",
+          text: `x × ${format(coef)} = x + □%`,
+          answer: p,
+          explanation: `${format(coef)} = 1 + ${format(p / 100)}, donc l'augmentation est de ${p} %.`
+        };
+      }
+
+      function qCoefficientToDecreasePercent() {
+        const p = random(SMALL_PERCENTS.filter((p) => p < 100));
+        const coef = round(1 - p / 100);
+
+        return {
+          type: "Du coefficient au pourcentage",
+          text: `x × ${format(coef)} = x - □%`,
+          answer: p,
+          explanation: `${format(coef)} = 1 - ${format(p / 100)}, donc la diminution est de ${p} %.`
+        };
+      }
+
+      function qEvolutionPercent() {
+        const p = random([10, 20, 25, 30, 40, 50]);
+        const start = wholeFriendly();
+        const up = Math.random() > 0.5;
+        const end = up
+          ? start * (1 + p / 100)
+          : start * (1 - p / 100);
+
+        return {
+          type: "Taux d'évolution",
+          text: `${start} → ${format(end)} : □%`,
+          answer: up ? p : -p,
+          explanation: `(${format(end)} - ${start}) ÷ ${start} × 100 = ${up ? p : -p} %.`
+        };
+      }
+
+      const generators = [
+        qMultiplierIncrease,
+        qMultiplierDecrease,
+        qIncreaseNumber,
+        qDecreaseNumber,
+        qPercentOf,
+        qFindWhole,
+        qFindPercent,
+        qReverseIncrease,
+        qReverseDecrease,
+        qCoefficientToIncreasePercent,
+        qCoefficientToDecreasePercent,
+        qEvolutionPercent
+      ];
+
+      function chooseGenerator() {
+        let generator;
+        do {
+          generator = random(generators);
+        } while (generators.length > 1 && generator.name === state.lastType);
+
+        state.lastType = generator.name;
+        return generator;
+      }
+
+      function renderQuestion(question) {
+        els.question.textContent = question.text;
+      }
+
+      function newQuestion() {
+        state.questionNumber += 1;
+        state.currentQuestion = chooseGenerator()();
+        state.awaitingNext = false;
+
+        els.feedback.className = "feedback";
+        els.feedback.textContent = "";
+        els.button.textContent = "Valider";
+        els.input.value = "";
+        els.input.disabled = false;
+        els.input.readOnly = false;
+
+        els.typeLabel.textContent = state.currentQuestion.type;
+        els.questionNumber.textContent = `Question ${state.questionNumber}`;
+        renderQuestion(state.currentQuestion);
+
+        requestAnimationFrame(() => {
+          try {
+            els.input.focus({ preventScroll: true });
+          } catch (error) {
+            els.input.focus();
+          }
+        });
+      }
+
+      function showCorrect() {
+        els.feedback.className = "feedback show correct";
+        els.feedback.innerHTML = `<strong>Correct.</strong> ${state.currentQuestion.explanation}`;
+      }
+
+      function showWrong() {
+        els.feedback.className = "feedback show wrong";
+        els.feedback.innerHTML =
+          `<strong>Incorrect.</strong> Réponse : <strong>${format(state.currentQuestion.answer)}</strong>. ` +
+          state.currentQuestion.explanation;
+      }
+
+      function submitAnswer(forceCorrect = false) {
+        if (state.awaitingNext) {
+          newQuestion();
+          if (!forceCorrect) return;
+        }
+
+        const given = forceCorrect
+          ? state.currentQuestion.answer
+          : normalizeAnswer(els.input.value);
+        if (!Number.isFinite(given)) {
+          els.feedback.className = "feedback show wrong";
+          els.feedback.textContent = "Entre un nombre valide.";
+          els.input.focus();
+          return;
+        }
+
+        if (isCorrect(given, state.currentQuestion.answer)) {
+          const previousLevel = levelFromBest(state.best);
+
+          state.streak += 1;
+          state.correct += 1;
+          state.best = Math.max(state.best, state.streak);
+
+          const currentLevel = levelFromBest(state.best);
+          const leveledUp =
+            currentLevel &&
+            (!previousLevel || currentLevel.name !== previousLevel.name);
+
+          save();
+          updateStats();
+          showCorrect();
+          playCorrectSound();
+
+          if (leveledUp) {
+            setTimeout(() => celebrateLevel(currentLevel), 90);
+          }
+
+          els.input.readOnly = true;
+          els.button.textContent = "Suivante";
+          state.awaitingNext = true;
+
+          setTimeout(() => {
+            if (state.awaitingNext) newQuestion();
+          }, leveledUp ? 1550 : 700);
+        } else {
+          state.streak = 0;
+          save();
+          updateStats();
+          showWrong();
+          playWrongSound();
+
+          // A wrong answer ends this question immediately.
+          // The correction is shown and the user only needs to press "Suivante".
+          els.input.readOnly = true;
+          els.button.textContent = "Suivante";
+          state.awaitingNext = true;
+          els.button.focus();
+        }
+      }
+
+      els.form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        submitAnswer();
+      });
+
+      // Reliable keyboard handling on desktop.
+      // Enter validates; Backspace/Delete are handled explicitly so they work
+      // even in embedded browser previews that sometimes intercept them.
+      els.input.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.code === "NumpadEnter") {
+          event.preventDefault();
+          submitAnswer();
+          return;
+        }
+
+        if (state.awaitingNext || els.input.readOnly) return;
+
+        if (event.key === "Backspace") {
+          event.preventDefault();
+
+          const start = els.input.selectionStart ?? els.input.value.length;
+          const end = els.input.selectionEnd ?? start;
+
+          if (start !== end) {
+            els.input.value =
+              els.input.value.slice(0, start) + els.input.value.slice(end);
+            els.input.setSelectionRange(start, start);
+          } else if (start > 0) {
+            els.input.value =
+              els.input.value.slice(0, start - 1) + els.input.value.slice(end);
+            els.input.setSelectionRange(start - 1, start - 1);
+          }
+          return;
+        }
+
+        if (event.key === "Delete") {
+          event.preventDefault();
+
+          const start = els.input.selectionStart ?? 0;
+          const end = els.input.selectionEnd ?? start;
+
+          if (start !== end) {
+            els.input.value =
+              els.input.value.slice(0, start) + els.input.value.slice(end);
+            els.input.setSelectionRange(start, start);
+          } else if (start < els.input.value.length) {
+            els.input.value =
+              els.input.value.slice(0, start) + els.input.value.slice(start + 1);
+            els.input.setSelectionRange(start, start);
+          }
+        }
+      });
+
+      els.button.addEventListener("keydown", (event) => {
+        if ((event.key === "Enter" || event.code === "NumpadEnter") && state.awaitingNext) {
+          event.preventDefault();
+          newQuestion();
+        }
+      });
+
+      // Hidden test shortcut, intentionally absent from the visible UI.
+      document.addEventListener("keydown", (event) => {
+        if (
+          event.ctrlKey &&
+          event.altKey &&
+          event.shiftKey &&
+          event.code === "KeyK"
+        ) {
+          event.preventDefault();
+          event.stopPropagation();
+          submitAnswer(true);
+        }
+      }, true);
+
+      updateStats();
+      newQuestion();
+    })();
+  </script>
+</body>
+</html>
